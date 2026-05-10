@@ -1,6 +1,6 @@
 {
   "name": "obsidian-tin-whistle-tabs",
-  "version": "100.0.0",
+  "version": "100.0.1",
   "description": "Render compact tin whistle fingering diagrams above note tabs in Obsidian code blocks.",
   "main": "main.js",
   "scripts": {

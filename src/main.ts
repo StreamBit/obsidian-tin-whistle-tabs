@@ -57,7 +57,7 @@ interface GeneratedNote {
   noteKey: string;
   label: string;
   pc: number;
-  degree: number;
+  offset: number;
   isUpper: boolean;
   variants: FingeringVariant[];
 }
@@ -135,20 +135,25 @@ const NOTE_BASE_PC: Record<string, number> = {
 const SHARP_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const FLAT_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
 const FLAT_KEYS = new Set<WhistleKey>(["F", "Bb", "Eb", "Ab", "Db", "Gb"]);
-const MAJOR_STEPS = [0, 2, 4, 5, 7, 9, 11];
+const PLAYABLE_OFFSETS = [0, 2, 3, 4, 5, 6, 7, 9, 10, 11];
 
-const STANDARD_MAJOR_FINGERINGS: Record<number, HoleState[]> = {
+const STANDARD_FINGERINGS: Record<number, HoleState[]> = {
   0: ["closed", "closed", "closed", "closed", "closed", "closed"],
-  1: ["closed", "closed", "closed", "closed", "closed", "open"],
-  2: ["closed", "closed", "closed", "closed", "open", "open"],
-  3: ["closed", "closed", "closed", "open", "open", "open"],
-  4: ["closed", "closed", "open", "open", "open", "open"],
-  5: ["closed", "open", "open", "open", "open", "open"],
-  6: ["open", "open", "open", "open", "open", "open"]
+  2: ["closed", "closed", "closed", "closed", "closed", "open"],
+  3: ["closed", "closed", "closed", "closed", "half", "open"],
+  4: ["closed", "closed", "closed", "closed", "open", "open"],
+  5: ["closed", "closed", "closed", "open", "open", "open"],
+  6: ["closed", "closed", "half", "open", "open", "open"],
+  7: ["closed", "closed", "open", "open", "open", "open"],
+  9: ["closed", "open", "open", "open", "open", "open"],
+  10: ["open", "closed", "closed", "open", "open", "open"],
+  11: ["open", "open", "open", "open", "open", "open"]
 };
 
 const HIGH_ROOT_VENT: HoleState[] = ["open", "closed", "closed", "closed", "closed", "closed"];
-const LEADING_TONE_STABILIZED: HoleState[] = ["open", "open", "open", "open", "open", "half"];
+const CNATURAL_HALF_HOLE: HoleState[] = ["half", "open", "open", "open", "open", "open"];
+const CSHARP_BOTTOM_COVERED: HoleState[] = ["open", "open", "open", "open", "open", "closed"];
+const GSHARP_CROSS_FINGER: HoleState[] = ["closed", "closed", "open", "closed", "closed", "open"];
 
 export default class TinWhistleTabsPlugin extends Plugin {
   settings: TinWhistleTabsSettings;
@@ -740,13 +745,8 @@ function readStandaloneNoteToken(line: string, index: number): ParsedNoteToken |
     return null;
   }
 
-  const invalidToken = readStandaloneInvalidNoteToken(line, index);
-  if (invalidToken) {
-    return invalidToken;
-  }
-
   if (!/[a-gA-G]/.test(first)) {
-    return null;
+    return readStandaloneInvalidNoteToken(line, index);
   }
 
   let cursor = index + 1;
@@ -766,7 +766,7 @@ function readStandaloneNoteToken(line: string, index: number): ParsedNoteToken |
 
   const parsed = parseNoteToken(line.slice(index, cursor));
   if (!parsed) {
-    return null;
+    return readStandaloneInvalidNoteToken(line, index);
   }
 
   return { ...parsed, isUpper };
@@ -825,34 +825,34 @@ function getNotesForKey(key: WhistleKey): GeneratedNote[] {
   const root = KEY_TO_PC[key];
   const notes: GeneratedNote[] = [];
 
-  for (let degree = 0; degree < MAJOR_STEPS.length; degree += 1) {
-    const pc = modulo(root + MAJOR_STEPS[degree], 12);
+  for (const offset of PLAYABLE_OFFSETS) {
+    const pc = modulo(root + offset, 12);
     const label = noteNameForPc(pc, preferFlats);
-    notes.push(createGeneratedNote(label, pc, degree, false));
+    notes.push(createGeneratedNote(label, pc, offset, false));
   }
 
-  for (let degree = 0; degree < MAJOR_STEPS.length; degree += 1) {
-    const pc = modulo(root + MAJOR_STEPS[degree], 12);
+  for (const offset of PLAYABLE_OFFSETS) {
+    const pc = modulo(root + offset, 12);
     const label = `${noteNameForPc(pc, preferFlats)}+`;
-    notes.push(createGeneratedNote(label, pc, degree, true));
+    notes.push(createGeneratedNote(label, pc, offset, true));
   }
 
   return notes;
 }
 
-function createGeneratedNote(label: string, pc: number, degree: number, isUpper: boolean): GeneratedNote {
+function createGeneratedNote(label: string, pc: number, offset: number, isUpper: boolean): GeneratedNote {
   return {
     noteKey: label,
     label,
     pc,
-    degree,
+    offset,
     isUpper,
-    variants: getVariantsForDegree(degree, isUpper)
+    variants: getVariantsForOffset(offset, isUpper)
   };
 }
 
-function getVariantsForDegree(degree: number, isUpper: boolean): FingeringVariant[] {
-  const standard = STANDARD_MAJOR_FINGERINGS[degree];
+function getVariantsForOffset(offset: number, isUpper: boolean): FingeringVariant[] {
+  const standard = STANDARD_FINGERINGS[offset];
   const variants: FingeringVariant[] = [
     {
       id: "standard",
@@ -861,7 +861,7 @@ function getVariantsForDegree(degree: number, isUpper: boolean): FingeringVarian
     }
   ];
 
-  if (isUpper && degree === 0) {
+  if (isUpper && offset === 0) {
     variants.push({
       id: "top-hole-vent",
       name: "Top-hole vent",
@@ -869,11 +869,27 @@ function getVariantsForDegree(degree: number, isUpper: boolean): FingeringVarian
     });
   }
 
-  if (degree === 6) {
+  if (offset === 6) {
     variants.push({
-      id: "stabilized",
-      name: "Stabilized",
-      holes: LEADING_TONE_STABILIZED
+      id: "cross-finger",
+      name: "Cross-finger",
+      holes: GSHARP_CROSS_FINGER
+    });
+  }
+
+  if (offset === 10) {
+    variants.push({
+      id: "half-hole",
+      name: "Half-hole",
+      holes: CNATURAL_HALF_HOLE
+    });
+  }
+
+  if (offset === 11) {
+    variants.push({
+      id: "bottom-covered",
+      name: "Bottom covered",
+      holes: CSHARP_BOTTOM_COVERED
     });
   }
 

@@ -17,7 +17,7 @@ d+ c#+ b a g
 
 - Use `tin-whistle-tabs` as the fenced code block language by default.
 - Add `key: d` inside a block to select the physical whistle key for that block.
-- Notes are absolute note names like `d`, `f#`, `bb`, or `d+`.
+- Notes are absolute note names like `d`, `f#`, `c`, `bb`, or `d+`.
 - `+` means the upper octave/register and appears in the reserved octave row.
 - Lines starting with `:` or `#` are visible, but ignored by the fingering parser.
 - Only standalone notes are parsed, so words like `day` are left alone.
