@@ -1,0 +1,251 @@
+.twt-container {
+  position: relative;
+  overflow-x: hidden;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-s);
+  background: var(--code-background);
+}
+
+.twt-toolbar {
+  position: sticky;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  min-width: max-content;
+}
+
+.twt-key-select {
+  width: auto;
+  min-width: 4.5rem;
+  font-size: var(--font-ui-smaller);
+}
+
+.twt-block-warning {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+  white-space: nowrap;
+}
+
+.twt-lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--twt-line-spacing, 0.375rem);
+  min-width: 0;
+  max-width: 100%;
+}
+
+.twt-music-line,
+.twt-blank-line,
+.twt-ignored-line {
+  font-family: var(--font-monospace);
+  font-size: var(--twt-letter-size, var(--code-size));
+  line-height: 1.2;
+}
+
+.twt-music-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  column-gap: 0;
+  row-gap: var(--twt-line-spacing, 0.375rem);
+  min-height: calc((6 * var(--twt-hole-size, 0.38rem)) + var(--twt-hole-gap, 0.08rem) * 5 + var(--twt-octave-size, 1.05rem) + 1.35em);
+  max-width: 100%;
+  white-space: normal;
+}
+
+.twt-ignored-line {
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-height: 1.35em;
+}
+
+.twt-blank-line {
+  min-height: 1.2em;
+}
+
+.twt-note-cell {
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: max(var(--twt-cell-width, 1.75rem), calc(var(--twt-token-length, 1) * 1ch));
+  min-height: inherit;
+}
+
+.twt-spacer {
+  display: inline-block;
+  align-self: flex-end;
+  max-width: 100%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.twt-note-label {
+  color: var(--text-normal);
+  min-height: 1.35em;
+  white-space: pre;
+}
+
+.twt-diagram {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--twt-hole-gap, 0.08rem);
+  width: var(--twt-cell-width, 1.75rem);
+  min-height: calc((6 * var(--twt-hole-size, 0.38rem)) + var(--twt-hole-gap, 0.08rem) * 5 + var(--twt-octave-size, 1.05rem));
+  color: var(--twt-fingering-color, var(--interactive-accent));
+}
+
+.twt-hole {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--twt-hole-size, 0.38rem);
+  height: var(--twt-hole-size, 0.38rem);
+  border: 1.4px solid var(--twt-fingering-color, var(--interactive-accent));
+  border-radius: 999px;
+  font-size: calc(var(--twt-hole-size, 0.38rem) * 0.9);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.twt-hole-closed {
+  background: var(--twt-fingering-color, var(--interactive-accent));
+}
+
+.twt-hole-open {
+  background: transparent;
+}
+
+.twt-hole-half {
+  background: linear-gradient(90deg, var(--twt-fingering-color, var(--interactive-accent)) 50%, transparent 50%);
+}
+
+.twt-hole-empty {
+  border-color: transparent;
+  background: transparent;
+}
+
+.twt-warning-hole {
+  color: var(--twt-warning-color, var(--text-on-accent));
+  background: var(--twt-fingering-color, var(--interactive-accent));
+}
+
+.twt-octave-row {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: var(--twt-octave-size, 1.05rem);
+  color: var(--twt-fingering-color, var(--interactive-accent));
+  font-size: calc(var(--twt-octave-size, 1.05rem) * 0.72);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.twt-settings-keybar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.twt-settings-keybar select {
+  min-width: 5rem;
+}
+
+.twt-reset-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin: 0 0 1rem;
+}
+
+.twt-display-settings {
+  margin-bottom: 1rem;
+}
+
+.twt-settings-preview {
+  margin: 0.75rem 0 0.5rem;
+  max-width: 100%;
+}
+
+.twt-preference-note {
+  display: grid;
+  grid-template-columns: minmax(3.5rem, 5rem) minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.twt-preference-note-name {
+  font-family: var(--font-monospace);
+  font-weight: 600;
+  padding-top: 0.5rem;
+}
+
+.twt-fingering-choice-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.twt-fingering-choice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  width: 10.75rem;
+  min-height: 5.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--radius-s);
+  background: var(--background-primary);
+  color: var(--text-normal);
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+}
+
+.twt-fingering-choice.is-selected {
+  border-color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+}
+
+.twt-fingering-choice-name {
+  font-size: var(--font-ui-small);
+  overflow-wrap: anywhere;
+}
+
+.twt-fingering-choice .twt-diagram {
+  --twt-hole-size: 0.32rem;
+  --twt-hole-gap: 0.06rem;
+  --twt-cell-width: 1rem;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 600px) {
+  .twt-preference-note {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .twt-preference-note-name {
+    padding-top: 0;
+  }
+
+  .twt-fingering-choice {
+    width: 100%;
+  }
+}

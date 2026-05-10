@@ -1,0 +1,25 @@
+{
+  "name": "obsidian-tin-whistle-tabs",
+  "version": "100.0.0",
+  "description": "Render compact tin whistle fingering diagrams above note tabs in Obsidian code blocks.",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "tsc -noEmit -skipLibCheck && node esbuild.config.mjs production"
+  },
+  "keywords": [
+    "obsidian",
+    "tin-whistle",
+    "tabs"
+  ],
+  "author": "StreamBit",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.30",
+    "builtin-modules": "^3.3.0",
+    "esbuild": "^0.21.5",
+    "obsidian": "^1.5.12",
+    "tslib": "^2.6.2",
+    "typescript": "^5.4.5"
+  }
+}

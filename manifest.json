@@ -1,0 +1,10 @@
+{
+  "id": "tin-whistle-tabs",
+  "name": "Tin Whistle Tabs",
+  "version": "100.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "Render compact tin whistle fingering diagrams above note tabs in code blocks.",
+  "author": "StreamBit",
+  "authorUrl": "https://github.com/StreamBit",
+  "isDesktopOnly": false
+}
