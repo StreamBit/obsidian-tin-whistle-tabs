@@ -135,16 +135,18 @@ const NOTE_BASE_PC: Record<string, number> = {
 const SHARP_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 const FLAT_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"];
 const FLAT_KEYS = new Set<WhistleKey>(["F", "Bb", "Eb", "Ab", "Db", "Gb"]);
-const PLAYABLE_OFFSETS = [0, 2, 3, 4, 5, 6, 7, 9, 10, 11];
+const PLAYABLE_OFFSETS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
 const STANDARD_FINGERINGS: Record<number, HoleState[]> = {
   0: ["closed", "closed", "closed", "closed", "closed", "closed"],
+  1: ["closed", "closed", "closed", "closed", "closed", "half"],
   2: ["closed", "closed", "closed", "closed", "closed", "open"],
   3: ["closed", "closed", "closed", "closed", "half", "open"],
   4: ["closed", "closed", "closed", "closed", "open", "open"],
   5: ["closed", "closed", "closed", "open", "open", "open"],
   6: ["closed", "closed", "half", "open", "open", "open"],
   7: ["closed", "closed", "open", "open", "open", "open"],
+  8: ["closed", "half", "open", "open", "open", "open"],
   9: ["closed", "open", "open", "open", "open", "open"],
   10: ["open", "closed", "closed", "open", "open", "open"],
   11: ["open", "open", "open", "open", "open", "open"]
